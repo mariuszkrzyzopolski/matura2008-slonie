@@ -1,15 +1,17 @@
 class Graph:
+    result = {}
+
     def __init__(self):
         with open("slo1.in") as f:
             self.content = f.readlines()
-            self.group = []
+        self.group = []
 
-    def cycles(self, result, point):
-        if point in result.keys():
-            proceed = result[point]
+    def cycles(self, point):
+        if point in self.result.keys():
+            proceed = self.result[point]
             self.group.append(point)
-            result.pop(point)
-            self.cycles(result, proceed)
+            self.result.pop(point)
+            self.cycles(proceed)
             return self.group
 
     def edges(self):
@@ -17,10 +19,18 @@ class Graph:
         slin = self.content[2].split(" ")
         slout = self.content[3].split(" ")
         for index, el in enumerate(slin):
-            result.update({int(el): int(slout[index])})
-        return self.cycles(result, 1)
+            self.result.update({int(el): int(slout[index])})
+        g = []
+        i = 1
+        while self.result:
+            g.append(self.cycles(i))
+            self.group = []
+            i += 1
+            #need reverse every list
+        return list(filter(None, g))
 
 
 if __name__ == '__main__':
     graph = Graph()
     print(graph.edges())
+    print(graph.result)
