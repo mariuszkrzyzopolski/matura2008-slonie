@@ -51,7 +51,7 @@ class Graph:
 
 if __name__ == '__main__':
     graph = Graph()
-    print(graph.edges())
+    # print(graph.edges())
     sumOfAllGroups = 0
     for cycle in graph.edges():
         if len(cycle) > 1:
