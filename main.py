@@ -1,9 +1,11 @@
+import sys
+
+
 class Graph:
     result = {}
 
     def __init__(self):
-        with open("slo1.in") as f:
-            self.content = f.readlines()
+        self.content = sys.stdin.readlines()
         self.group = []
 
     def cycles(self, point):
@@ -26,11 +28,32 @@ class Graph:
             g.append(self.cycles(i))
             self.group = []
             i += 1
-            #need reverse every list
         return list(filter(None, g))
+
+    def method1(self, wages):
+        return sum(wages) + (len(wages) - 2) * min(wages)
+
+    def method2(self, wages, global_minimal):
+        return sum(wages) + min(wages) + (len(wages) + 1) * global_minimal
+
+    def order(self, group):
+        wages = []
+        origin_wages = self.content[1].split(" ")
+        for el in group:
+            wages.append(int(origin_wages[el - 1]))
+        res1 = self.method1(wages)
+        res2 = self.method2(wages, min(map(int, origin_wages)))
+        if res1 < res2:
+            return res1
+        else:
+            return res2
 
 
 if __name__ == '__main__':
     graph = Graph()
     print(graph.edges())
-    print(graph.result)
+    sumOfAllGroups = 0
+    for cycle in graph.edges():
+        if len(cycle) > 1:
+            sumOfAllGroups += graph.order(cycle)
+    print(sumOfAllGroups)
