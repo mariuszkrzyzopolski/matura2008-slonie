@@ -16,6 +16,17 @@ class Graph:
             self.cycles(proceed)
             return self.group
 
+    def iterative_cycles(self, root):
+        stack = [root]
+        while len(stack):
+            last = stack[-1]
+            stack.pop()
+            if last in self.result.keys():
+                self.group.append(last)
+                stack.append(self.result[last])
+                self.result.pop(last)
+        return self.group
+
     def edges(self):
         result = dict()
         slin = self.content[2].split(" ")
@@ -25,7 +36,8 @@ class Graph:
         g = []
         i = 1
         while self.result:
-            g.append(self.cycles(i))
+            g.append(self.iterative_cycles(i))
+            # g.append(self.cycles(i))
             self.group = []
             i += 1
         return list(filter(None, g))
